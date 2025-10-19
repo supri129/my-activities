@@ -31,7 +31,7 @@ export const Sidebar = () => {
   return (
     <aside className="hidden md:flex md:w-64 flex-shrink-0 bg-gray-100 dark:bg-gray-800 p-4 flex-col">
       <div className="flex items-center mb-8">
-        <h1 className="text-2xl font-bold">TodoApp</h1>
+        <h1 className="text-2xl font-bold">My Activities</h1>
       </div>
       <nav className="space-y-2">
         <SidebarLink to="/" icon={<LayoutDashboard size={20} />}>
