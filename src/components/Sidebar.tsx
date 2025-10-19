@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, User } from "lucide-react";
+import { LayoutDashboard, User, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SidebarLink = ({
@@ -39,6 +39,9 @@ export const Sidebar = () => {
         </SidebarLink>
         <SidebarLink to="/profile" icon={<User size={20} />}>
           Profile
+        </SidebarLink>
+        <SidebarLink to="/settings" icon={<Settings size={20} />}>
+          Settings
         </SidebarLink>
       </nav>
     </aside>
