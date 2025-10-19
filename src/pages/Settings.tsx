@@ -11,23 +11,44 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { LogOut } from "lucide-react";
-import { showError } from "@/utils/toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { LogOut, Archive, History, Trash2 } from "lucide-react";
+import { showError, showSuccess } from "@/utils/toast";
 
 const Settings = () => {
   const handleLogout = () => {
     showError("Logout functionality is not implemented yet.");
   };
 
+  const handleNotImplemented = (feature: string) => {
+    showError(`${feature} is not implemented yet.`);
+  };
+
+  const handleClearAllTasks = () => {
+    // In a real app, you would clear the tasks from state/storage here.
+    showSuccess("All tasks have been cleared.");
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Settings</h1>
       <Tabs defaultValue="appearance" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="data">Data Management</TabsTrigger>
         </TabsList>
         <TabsContent value="appearance">
           <Card>
@@ -114,6 +135,97 @@ const Settings = () => {
                 </p>
                 <Button variant="outline">Enable 2FA</Button>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="data">
+          <Card>
+            <CardHeader>
+              <CardTitle>Data Management</CardTitle>
+              <CardDescription>
+                Manage your application data.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="backup" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5">
+                  <TabsTrigger value="backup">Backup</TabsTrigger>
+                  <TabsTrigger value="restore">Restore</TabsTrigger>
+                  <TabsTrigger value="completed">Completed</TabsTrigger>
+                  <TabsTrigger value="pending">Pending</TabsTrigger>
+                  <TabsTrigger value="clear">Clear All</TabsTrigger>
+                </TabsList>
+                <TabsContent value="backup" className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Download a backup of all your tasks.
+                  </p>
+                  <Button onClick={() => handleNotImplemented("Backup")}>
+                    <Archive className="mr-2 h-4 w-4" /> Backup Tasks
+                  </Button>
+                </TabsContent>
+                <TabsContent value="restore" className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Restore tasks from a backup file.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleNotImplemented("Restore")}
+                  >
+                    <History className="mr-2 h-4 w-4" /> Restore Tasks
+                  </Button>
+                </TabsContent>
+                <TabsContent value="completed" className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Manage all your completed tasks.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleNotImplemented("Clear Completed")}
+                  >
+                    Clear Completed Tasks
+                  </Button>
+                </TabsContent>
+                <TabsContent value="pending" className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    View all your pending tasks.
+                  </p>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleNotImplemented("View Pending")}
+                  >
+                    View Pending Tasks
+                  </Button>
+                </TabsContent>
+                <TabsContent value="clear" className="pt-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Permanently delete all tasks. This action cannot be undone.
+                  </p>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive">
+                        <Trash2 className="mr-2 h-4 w-4" /> Clear All Tasks
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete all your tasks.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleClearAllTasks}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>
