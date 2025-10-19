@@ -8,24 +8,28 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { LogOut } from "lucide-react";
 import { showError } from "@/utils/toast";
 
 const Settings = () => {
   const handleLogout = () => {
-    // In a real app, you would handle the logout logic here.
     showError("Logout functionality is not implemented yet.");
   };
 
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Settings</h1>
-      <Tabs defaultValue="theme" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="theme">Theme</TabsTrigger>
+      <Tabs defaultValue="appearance" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="appearance">Appearance</TabsTrigger>
           <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
         </TabsList>
-        <TabsContent value="theme">
+        <TabsContent value="appearance">
           <Card>
             <CardHeader>
               <CardTitle>Appearance</CardTitle>
@@ -50,6 +54,66 @@ const Settings = () => {
               <Button variant="destructive" onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" /> Logout
               </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="notifications">
+          <Card>
+            <CardHeader>
+              <CardTitle>Notifications</CardTitle>
+              <CardDescription>
+                Manage your notification preferences.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="email-notifications">
+                    Email Notifications
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Receive emails about your account activity.
+                  </p>
+                </div>
+                <Switch id="email-notifications" defaultChecked />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="push-notifications">Push Notifications</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Get push notifications on your devices.
+                  </p>
+                </div>
+                <Switch id="push-notifications" />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="security">
+          <Card>
+            <CardHeader>
+              <CardTitle>Security</CardTitle>
+              <CardDescription>Update your security settings.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="current-password">Current Password</Label>
+                <Input id="current-password" type="password" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="new-password">New Password</Label>
+                <Input id="new-password" type="password" />
+              </div>
+              <Button>Change Password</Button>
+              <div className="border-t pt-6">
+                <h3 className="text-lg font-medium">
+                  Two-Factor Authentication
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Add an extra layer of security to your account.
+                </p>
+                <Button variant="outline">Enable 2FA</Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
