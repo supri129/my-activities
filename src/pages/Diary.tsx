@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -25,22 +25,38 @@ type DiaryEntry = {
 };
 
 const Diary = () => {
-  const [kavithai, setKavithai] = useState("");
-  const [entries, setEntries] = useState<DiaryEntry[]>([]);
+  const [kavithai, setKavithai] = useState(
+    () => localStorage.getItem("kavithai") || ""
+  );
+  const [entries, setEntries] = useState<DiaryEntry[]>(() => {
+    const savedEntries = localStorage.getItem("diaryEntries");
+    return savedEntries ? JSON.parse(savedEntries) : [];
+  });
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
   const [currentThought, setCurrentThought] = useState("");
 
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-    if (date) {
-      const dateString = format(date, "PPP");
+  useEffect(() => {
+    localStorage.setItem("kavithai", kavithai);
+  }, [kavithai]);
+
+  useEffect(() => {
+    localStorage.setItem("diaryEntries", JSON.stringify(entries));
+  }, [entries]);
+
+  useEffect(() => {
+    if (selectedDate) {
+      const dateString = format(selectedDate, "PPP");
       const existingEntry = entries.find((entry) => entry.date === dateString);
       setCurrentThought(existingEntry ? existingEntry.content : "");
     } else {
       setCurrentThought("");
     }
+  }, [selectedDate, entries]);
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
   };
 
   const handleSaveKavithai = () => {
@@ -49,7 +65,6 @@ const Diary = () => {
       return;
     }
     showSuccess("Kavithai saved successfully!");
-    // In a real app, you would save this to a backend.
   };
 
   const handleSaveThought = () => {
@@ -67,18 +82,15 @@ const Diary = () => {
 
     let updatedEntries;
     if (entryIndex > -1) {
-      // Update existing entry
       updatedEntries = [...entries];
       updatedEntries[entryIndex] = { date: dateString, content: currentThought };
     } else {
-      // Add new entry
       updatedEntries = [
         ...entries,
         { date: dateString, content: currentThought },
       ];
     }
 
-    // Sort entries by date (most recent first)
     updatedEntries.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );

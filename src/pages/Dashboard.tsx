@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -28,12 +28,54 @@ type SpecialEvent = {
 };
 
 const Dashboard = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedDates, setSelectedDates] = useState<Date[] | undefined>([]);
-  const [events, setEvents] = useState<SpecialEvent[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    if (savedTasks) {
+      const parsed = JSON.parse(savedTasks);
+      return parsed.map((task: Task) => ({
+        ...task,
+        dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+      }));
+    }
+    return [];
+  });
+
+  const [selectedDates, setSelectedDates] = useState<Date[] | undefined>(() => {
+    const savedDates = localStorage.getItem("selectedDates");
+    if (savedDates) {
+      const parsed = JSON.parse(savedDates);
+      return parsed.map((date: string) => new Date(date));
+    }
+    return [];
+  });
+
+  const [events, setEvents] = useState<SpecialEvent[]>(() => {
+    const savedEvents = localStorage.getItem("events");
+    if (savedEvents) {
+      const parsed = JSON.parse(savedEvents);
+      return parsed.map((event: SpecialEvent) => ({
+        ...event,
+        date: new Date(event.date),
+      }));
+    }
+    return [];
+  });
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date | undefined>();
   const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedDates", JSON.stringify(selectedDates));
+  }, [selectedDates]);
+
+  useEffect(() => {
+    localStorage.setItem("events", JSON.stringify(events));
+  }, [events]);
 
   const handleDayClick = (day: Date) => {
     const existingEvent = events.find(
