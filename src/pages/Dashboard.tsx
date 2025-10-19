@@ -5,11 +5,7 @@ import { TodoList, Task } from "@/components/TodoList";
 
 const Dashboard = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, text: "Create a modern to-do list app", completed: true },
-    { id: 2, text: "Add a mini calendar", completed: false },
-    { id: 3, text: "Implement settings page", completed: false },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   return (
     <div className="space-y-6">
