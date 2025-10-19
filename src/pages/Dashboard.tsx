@@ -2,10 +2,19 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { TodoList, Task } from "@/components/TodoList";
+import { showSuccess } from "@/utils/toast";
+import { format } from "date-fns";
 
 const Dashboard = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    if (selectedDate) {
+      showSuccess(`Favorite date set: ${format(selectedDate, "PPP")}`);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -27,7 +36,7 @@ const Dashboard = () => {
             <Calendar
               mode="single"
               selected={date}
-              onSelect={setDate}
+              onSelect={handleDateSelect}
               className="rounded-md border"
             />
           </CardContent>
